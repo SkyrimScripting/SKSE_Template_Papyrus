@@ -1,6 +1,6 @@
 > 📜 other templates available at https://github.com/SkyrimScripting/SKSE_Templates
 
-# SKSE - writing to log files
+# SKSE - implementing native C++ Papyrus functions
 
 A simple SKSE plugin for Skyrim using:
 
@@ -13,15 +13,9 @@ A simple SKSE plugin for Skyrim using:
 
 ## What does it do?
 
-It writes to a log file.
+Implements a few Papyrus functions in C++.
 
-Read [`plugin.cpp`](plugin.cpp) for a bunch of details on what it's doing!
-
-I *highly recommend* you create a log file for your mod.
-
-It's useful for:
-- your own debugging, while developing the mod
-- debugging issues from your users (**ask your users to provide .log files in their bug reports on Nexus/GitHub!**)
+> `< better description coming soon >`
 
 ## Requirements
 

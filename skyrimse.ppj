@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
-<PapyrusProject xmlns="PapyrusProject.xsd" Flags="TESV_Papyrus_Flags.flg" Game="sse" Output="build/Papyrus">
+<PapyrusProject xmlns="PapyrusProject.xsd" Flags="TESV_Papyrus_Flags.flg" Game="sse" Output="Scripts">
     <!--
         These variables contain hard-coded paths because the VS Code Papyrus extension does not support environment variables: https://github.com/joelday/papyrus-lang/issues/145
         Please change the values of these variables to point to folders on your PC.
@@ -15,23 +15,21 @@
           New-Item -ItemType SymbolicLink -Path "C:\Modding\PapyrusImports" -Target "C:\Users\mrowr\Dropbox\Skyrim\PapyrusImports"
     -->
     <Variables>
-        <Variable Name="ModName" Value="SkyrimScripting.Spec.Scripts" />
+        <Variable Name="ModName" Value="MakingPapyrusFunctions" />
         <Variable Name="Mods" Value="C:\Modding\Mods" />
         <Variable Name="Imports" Value="C:\Modding\PapyrusImports" />
     </Variables>
     <Imports>
-        <Import>./SkyrimScripting.Spec.Papyrus/PapyrusScripts</Import>
-        <Import>./spec/Papyrus</Import>
+        <Import>./Scripts/Source</Import>
         <Import>@Imports\SKSE\Scripts\Source</Import>
         <Import>C:\Program Files (x86)\Steam\steamapps\common\Skyrim Special Edition\Data\Scripts\Source</Import>
     </Imports>
     <Folders>
-        <Folder>./SkyrimScripting.Spec.Papyrus/PapyrusScripts</Folder>
-        <Folder>./spec/Papyrus</Folder>
+        <Folder>./Scripts/Source</Folder>
     </Folders>
     <PostBuildEvent Description="Deploy scripts to Mods folder" UseInBuild="true">
-        <Command>(if exist "@Mods\@ModName" rmdir /s /q "@Mods\@ModName")</Command>
+        <Command>(if exist "@Mods\@ModName\Scripts" rmdir /s /q "@Mods\@ModName\Scripts")</Command>
         <Command>mkdir "@Mods\@ModName\Scripts"</Command>
-        <Command>xcopy /e .\Build\Papyrus "@Mods\@ModName\Scripts"</Command>
+        <Command>xcopy /e .\Scripts "@Mods\@ModName\Scripts"</Command>
     </PostBuildEvent>
 </PapyrusProject>

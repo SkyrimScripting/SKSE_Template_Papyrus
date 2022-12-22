@@ -27,9 +27,4 @@
     <Folders>
         <Folder>./Scripts/Source</Folder>
     </Folders>
-    <PostBuildEvent Description="Deploy scripts to Mods folder" UseInBuild="true">
-        <Command>(if exist "@Mods\@ModName\Scripts" rmdir /s /q "@Mods\@ModName\Scripts")</Command>
-        <Command>mkdir "@Mods\@ModName\Scripts"</Command>
-        <Command>xcopy /e .\Scripts "@Mods\@ModName\Scripts"</Command>
-    </PostBuildEvent>
 </PapyrusProject>

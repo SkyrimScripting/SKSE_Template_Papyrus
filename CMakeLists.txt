@@ -20,15 +20,37 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is require
 # When your SKSE .dll is compiled, this will automatically copy the .dll into your mods folder.
 # Only works if you configure DEPLOY_ROOT above (or set the SKYRIM_MODS_FOLDER environment variable)
 if(EXISTS "${DEPLOY_ROOT}")
-    set(MOD_FOLDER "${DEPLOY_ROOT}/${PROJECT_NAME}")
-    set(DLL_FOLDER "${MOD_FOLDER}/SKSE/Plugins")
+    set(MOD_FOLDER     "${DEPLOY_ROOT}/${PROJECT_NAME}")
+    set(DLL_FOLDER     "${MOD_FOLDER}/SKSE/Plugins")
+    set(PAPYRUS_FOLDER "${MOD_FOLDER}/Scripts")
     message(STATUS "Plugin output directory: ${MOD_FOLDER}")
     add_custom_command(
         TARGET "${PROJECT_NAME}"
         POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E make_directory    "${DLL_FOLDER}"
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:${PROJECT_NAME}>"     "${DLL_FOLDER}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_PDB_FILE:${PROJECT_NAME}>" "${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:${PROJECT_NAME}>"      "${DLL_FOLDER}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_PDB_FILE:${PROJECT_NAME}>"  "${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory    "${CMAKE_CURRENT_SOURCE_DIR}/Scripts" "${PAPYRUS_FOLDER}"
         VERBATIM
     )
 endif()
+
+add_custom_target(
+    DeployToMods
+    COMMAND "${CMAKE_COMMAND}" -E make_directory    "${DLL_FOLDER}"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:${PROJECT_NAME}>"      "${DLL_FOLDER}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_PDB_FILE:${PROJECT_NAME}>"  "${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory    "${CMAKE_CURRENT_SOURCE_DIR}/Scripts" "${PAPYRUS_FOLDER}"
+    VERBATIM
+)
+
+add_custom_target(
+    PackageMod
+    COMMAND "${CMAKE_COMMAND}" -E rm -r "temp-packaging"
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "temp-packaging/SKSE/Plugins"
+    COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${PROJECT_NAME}>"     "temp-packaging/SKSE/Plugins/"
+    COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_PDB_FILE:${PROJECT_NAME}>" "temp-packaging/SKSE/Plugins/"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Scripts" "temp-packaging/Scripts"
+    COMMAND "${CMAKE_COMMAND}" -E chdir temp-packaging "${CMAKE_COMMAND}" -E tar c "${PROJECT_NAME}.7z" --format=7zip "SKSE" "Scripts"
+    VERBATIM
+)

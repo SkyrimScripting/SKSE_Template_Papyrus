@@ -34,23 +34,3 @@ if(EXISTS "${DEPLOY_ROOT}")
         VERBATIM
     )
 endif()
-
-add_custom_target(
-    DeployToMods
-    COMMAND "${CMAKE_COMMAND}" -E make_directory    "${DLL_FOLDER}"
-    COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:${PROJECT_NAME}>"      "${DLL_FOLDER}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
-    COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_PDB_FILE:${PROJECT_NAME}>"  "${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
-    COMMAND "${CMAKE_COMMAND}" -E copy_directory    "${CMAKE_CURRENT_SOURCE_DIR}/Scripts" "${PAPYRUS_FOLDER}"
-    VERBATIM
-)
-
-add_custom_target(
-    PackageMod
-    COMMAND "${CMAKE_COMMAND}" -E rm -r "temp-packaging"
-    COMMAND "${CMAKE_COMMAND}" -E make_directory "temp-packaging/SKSE/Plugins"
-    COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${PROJECT_NAME}>"     "temp-packaging/SKSE/Plugins/"
-    COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_PDB_FILE:${PROJECT_NAME}>" "temp-packaging/SKSE/Plugins/"
-    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Scripts" "temp-packaging/Scripts"
-    COMMAND "${CMAKE_COMMAND}" -E chdir temp-packaging "${CMAKE_COMMAND}" -E tar c "${PROJECT_NAME}.7z" --format=7zip "SKSE" "Scripts"
-    VERBATIM
-)

@@ -2,6 +2,14 @@
 
 # SKSE - implementing native C++ Papyrus functions
 
+- [SKSE - implementing native C++ Papyrus functions](#skse---implementing-native-c-papyrus-functions)
+  - [What does it do?](#what-does-it-do)
+  - [Requirements](#requirements)
+  - [Project setup](#project-setup)
+  - [Setup your own repository](#setup-your-own-repository)
+
+---
+
 A simple SKSE plugin for Skyrim using:
 
 - C++
